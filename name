@@ -1,0 +1,959 @@
+7-1 银行业务队列简单模拟
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+int s;
+cin>>s;
+
+queue<int>a;
+queue<int>b;
+int n=0,m=0;
+int customer;
+for(int i=0;i<s;i++){
+    cin>>customer;
+
+    if(customer%2!=0){
+        a.push(customer);
+        n++;
+    }else{
+    b.push(customer);
+    m++;
+    }
+}
+
+bool flag=true;
+while(!a.empty()||!b.empty()){
+    for(int i=0;i<2&&!a.empty();i++){
+        if(!flag)cout<<" ";
+        cout<<a.front();
+        a.pop();
+        flag=false;
+    }
+
+    if(!b.empty()){
+        if(!flag)cout<<" ";
+        cout<<b.front();
+        flag=false;
+        b.pop();
+    }
+
+}
+cout<<endl;
+return 0;
+
+}
+
+7-2 表达式转换
+#include <cstdio>
+#include <cstring>
+using namespace std;
+int flag;
+void output(char *str, int l, int r) {
+    bool exist = false;
+    int cnt = 0, pos1 = -1, pos2 = -1;
+    for (int i = l; i <= r; i++) {
+        switch (str[i]) {
+        case '(': cnt++; exist = true; break;
+        case ')': cnt--; exist = true; break;
+        case '*': case '/': exist = true; if (!cnt) pos2 = i; break;
+        case '+': case '-': if (i != l) { exist = true; if (!cnt) pos1 = i; } break;
+        }
+    }
+    if (!exist) { if (flag++) printf(" "); for (int i = (str[l] == '+' ? l + 1 : l); i <= r; i++) printf("%c", str[i]); return; }
+    if (pos1 == -1) pos1 = pos2; if (pos1 == -1) { output(str, l + 1, r - 1); return; }
+    output(str, l, pos1 - 1); output(str, pos1 + 1, r);
+    if (flag++) printf(" "); printf("%c", str[pos1]);
+}
+int main() {
+    char str[100]; scanf("%s", str + 1); int n = strlen(str + 1);
+    flag = 0; output(str, 1, n);
+    return 0;
+}
+
+7-3 堆栈模拟队列
+#include <bits/stdc++.h>
+using namespace std;
+ 
+struct Stack
+{
+	int max;
+	int dev;
+	int a[100005];
+}S1,S2;
+ 
+int IsFull(Stack &S)
+{
+	if(S.dev > S.max)
+	{
+		return 1;
+	}
+	else return 0;
+}
+ 
+int IsEmpty(Stack &S)
+{
+	if(S.dev == 0)
+	{
+		return 1;
+	}
+	else return 0;
+}
+ 
+void Push(Stack &S,int item)
+{
+	S.a[S.dev++] = item;
+	return ;
+}
+ 
+int Pop(Stack &S)
+{
+	S.dev --;
+	return S.a[S.dev];
+}
+ 
+void AddQ(int item)
+{
+	if(!IsFull(S1))
+	{
+	    Push(S1,item);
+	}
+	else if(IsFull(S1) && IsEmpty(S2))
+	{
+		while(!IsEmpty(S1))
+		{
+			Push(S2,Pop(S1));
+		}
+		Push(S1,item);
+	}
+	else
+	{
+		cout << "ERROR:Full" << endl;
+	}
+//     cout << "dev:" << S1.dev << " " << S2.dev <<endl;
+	return ;
+}
+ 
+int DeleteQ()
+{
+	if(!IsEmpty(S2))
+	{
+		return Pop(S2);
+	}
+	else if(!IsEmpty(S1))
+	{
+		while(!IsEmpty(S1))
+		{
+			Push(S2,Pop(S1));
+		}
+		return Pop(S2);
+	}
+}
+ 
+int main()
+{
+	int n1,n2;
+	cin >> n1 >> n2;
+	getchar();
+	if(n1 > n2) swap(n1,n2);
+	S1.max = n1-1; S1.dev = 0;
+	S2.max = n2-1; S2.dev = 0;
+// 	cout << S1.max << " " << S2.max << endl;
+	char c;
+	while(cin>>c && c != 'T')
+	{
+		if(c == 'A')
+		{
+			int t;
+			cin >> t;
+			AddQ(t);
+		}
+		else if(c == 'D')
+		{
+			if(IsEmpty(S1) && IsEmpty(S2)) cout << "ERROR:Empty" << endl;
+			else cout << DeleteQ() << endl;
+		}
+	}
+	
+	return 0;
+}
+
+7-4 输出全排列
+#include<iostream>
+int a[10] = { 0,1,2,3,4,5,6,7,8,9 };
+using namespace std;
+void quanpailie(int a[], int first, int last);
+int main()
+{
+    int n;
+    cin >> n;
+    quanpailie(a, 1, n);
+}
+void quanpailie(int a[], int first, int last)
+{
+    if (first != last)
+    {
+        for (int i3 = first; i3 <= last; i3++)
+        {
+            int temp = a[i3];
+            for (int i5 = i3 - 1; i5 >= first; i5--)
+                a[i5 + 1] = a[i5];
+            a[first] = temp;
+            quanpailie(a, first + 1, last);
+            int temp2 = a[first];
+            for (int i5 = first + 1; i5 <= i3; i5++)
+                a[i5 - 1] = a[i5];
+            a[i3] = temp2;
+        }
+    }
+    else
+    {
+        for (int t = 1; t <= last; t++)
+            cout << a[t];
+        cout << endl;
+    }
+}
+7-5 出栈序列的合法性
+#include<bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+	int M, N, K;
+	int a[2000];
+	int cnt, top, flag, e;
+	int i;
+	scanf("%d %d %d", &M, &N, &K);
+	while (K--)//k个测试点，循环k次；
+	{
+		for (flag = cnt = -(top = (i = 0) - 1); i < N; i++)
+		{
+			scanf("%d", &e);//输入第i个出栈元素，将它存在变量e里；
+			while (top == -1 || (a[top] != e && top < M - 1))a[++top] = cnt++;//如果栈为空或(栈不为满且栈顶元素不等于第i个出栈元素)压栈；
+			if (a[top] != e)//退出上面循环后，就两种情况，(栈顶元素等于要出栈元素或栈满了)，如果栈顶元素不等于要出栈元素则不合理；
+			{
+				flag = 0;
+				//break;此处不可break，否则输入缓冲区里这一行数据剩下的没法被消化，会使得后面的输入乱序，从而导致输出错误；
+                //但如果逐行输入就不会有这样的问题；
+			}
+			else top--;//如果栈顶元素等于要出栈元素那就出栈；
+		}
+		if (flag)printf("YES\n");
+		else printf("NO\n");
+	}
+	return 0;
+}
+7-6 括号匹配
+#include <iostream>
+#include <cstring>
+
+struct Stack {
+    char *data;
+    int last;
+};
+
+bool isEmpty(Stack* s) {
+    return s->last == -1;
+}
+
+int main() {
+    Stack* s = new Stack;
+    s->data = new char[1000];
+    s->last = -1;
+    char str[1000];
+
+    std::cin.getline(str, 1000);  // Use getline for input
+    int left = 0, right = 0;
+
+    for (int i = 0; i < static_cast<int>(strlen(str)); i++) {
+        if (str[i] == '(' || str[i] == '[' || str[i] == '{') {
+            s->data[++s->last] = str[i];
+            left++;
+        } else if (str[i] == ')' || str[i] == ']' || str[i] == '}') {
+            right++;
+            if (s->last >= 0) {
+                switch (s->data[s->last]) {
+                    case '(':
+                        if (str[i] == ')') s->last--;
+                        break;
+                    case '[':
+                        if (str[i] == ']') s->last--;
+                        break;
+                    case '{':
+                        if (str[i] == '}') s->last--;
+                        break;
+                    default:
+                        break;    
+                }
+            }
+        }
+    }
+
+    std::cout << left << " " << right << std::endl;
+
+    if (isEmpty(s) && left == right) {
+        std::cout << "YES";
+    } else {
+        std::cout << "NO";
+    }
+
+    delete[] s->data;  // Free the allocated memory
+    delete s;          // Delete the stack
+    return 0;
+}
+
+7-7 后缀式求值
+#include<bits/stdc++.h>
+using namespace std;
+
+
+int main(){
+
+
+    string longstring;
+    getline(cin,longstring);
+
+    stringstream ss(longstring);
+
+    string str;
+
+    stack<double>stack;
+
+    while(ss>>str){
+
+        if(isdigit(str[0])||(str[0]=='-'&&str.size()>1)){
+            stack.push(stod(str));
+
+        }else {
+
+
+        double b=stack.top(); stack.pop();
+        double a=stack.top(); stack.pop();
+
+        switch(str[0]){
+
+        case'+':stack.push(a+b);break;
+        case'-':stack.push(a-b);break;
+        case'*':stack.push(a*b);break;
+        case'/':stack.push(a/b);break;
+
+
+        }
+
+
+
+        }
+
+    }
+    cout<<fixed<<setprecision(1)<<stack.top()<<endl;
+
+
+return 0;
+}
+
+7-8 进制转换
+#include <iostream>
+#include <iomanip> // for std::hex, std::oct
+#include <bitset>  // for std::bitset
+#include <cmath>   // for log2
+using namespace std;
+
+int main() {
+    int N, x;
+    cin >> N >> x;
+
+    if (x == 2) {
+        // 二进制
+        cout << bitset<32>(N).to_string().substr(32 - (N ? (int)log2(N) + 1 : 1)) << endl;
+    } else if (x == 8) {
+        // 八进制
+        cout << oct << N << endl;
+    } else if (x == 16) {
+        // 十六进制
+        cout << uppercase << hex << N << endl;
+    } else {
+        cout << "Unsupported base" << endl;
+    }
+
+    return 0;
+}
+
+7-10选数#include<stdio.h>
+int prime(int n);                       //判断是否为素数
+void fun(int x,int sum,int l);          //x表示累加的个数,sum表示累加和,l表示选择数字的位置
+int n,k,count = 0,num[20];
+int main()
+{
+
+	int i;
+	scanf("%d%d",&n,&k);
+	for(i = 0 ; i < n ; i++)
+	scanf("%d",&num[i]);
+	fun(0,0,0);
+	printf("%d\n",count);
+	return 0;
+}
+
+int prime(int n)
+{
+	int i;
+	if(n <=1 ) return 0;
+	for(i = 2 ; i*i <= n ; i++)
+	{
+		if(n%i == 0) return 0;
+	}
+	return 1;
+}
+
+void fun(int x,int sum,int l)
+{
+	int i;
+	if(x == k)                      //达到k个,判断是否为素数
+	{
+		if(prime(sum))
+			count++;
+	}
+	for(i = l ; i < n ; i++)        //没到k个,继续加下一个数
+		fun(x+1,sum+num[i],i+1);    //核心:相当于填空
+}
+7-11 猴子选大王
+
+#include<bits/stdc++.h>
+using namespace std;
+
+struct Node{
+int data;
+Node*next;
+
+Node(int n){
+data=n;
+next=nullptr;
+
+}
+
+};
+
+
+
+
+int main(){
+int n,m;
+
+cin>>n>>m;
+
+if(n==1)cout<<1<<endl;
+else{
+        
+Node *monkey=new Node(1);
+Node *cur=monkey;
+for(int i=2;i<=n;i++){
+    Node *monkeys=new Node(i);    
+    cur->next=monkeys;
+    cur=monkeys;
+    }
+cur->next=monkey;
+
+
+
+Node *cur1=cur;
+Node *cur1next=monkey;
+
+while(n>1){
+for(int i=1;i<m;i++){
+    cur1=cur1next;
+    cur1next=cur1next->next;
+    cur1->next=cur1next;
+    }
+    
+    
+    Node *todelete=cur1next;
+    cur1next=cur1next->next;
+    cur1->next=cur1next;
+    delete(todelete);
+    n--;
+    
+}
+
+cout<<cur1next->data<<endl;
+
+
+}
+
+return 0;
+}
+7-1 两个有序链表序列的合并
+#include<bits/stdc++.h>
+using namespace std;
+
+
+
+int main(){
+vector<int>a,b;
+int data;
+
+while(cin>>data&&data!=-1){
+    a.push_back(data);
+}
+int n=a.size();
+while(cin>>data&&data!=-1){
+    b.push_back(data);
+}
+int m=b.size();
+
+vector<int>sum(n+m);
+if(a.size()==0&&b.size()==0){
+    cout<<"NULL";
+    return 0;
+}
+merge(a.begin(),a.end(),b.begin(),b.end(),sum.begin());
+
+sort(sum.begin(),sum.end());
+
+
+bool flag=true;
+for(size_t i=0;i<sum.size();i++){
+    if(!flag)cout<<" ";
+    cout<<sum[i];
+    flag=false;
+}
+cout<<endl;
+
+return 0;
+}
+7-2 两个有序链表序列的交集
+#include<bits/stdc++.h>
+using namespace std;
+
+
+vector<int>inter_s(const vector<int>&s1,const vector<int>&s2){
+
+
+int i=0,j=0;
+vector<int>s3;
+int p=0;
+
+while(i<s1.size()&&j<s2.size()){
+    if(s1[i]==s2[j]){
+        s3.push_back(s1[i]);
+        i++;
+        j++;
+    }else if(s1[i]>s2[j]){
+
+    j++;
+
+
+    }else if(s1[i]<s2[j]){
+    i++;
+    }
+
+
+
+}
+
+
+
+return s3;
+
+}
+
+int main(){
+
+vector<int>s1;
+vector<int>s2;
+int i=0,j=0;
+int n;
+vector<int>s3;
+while(cin>>n){
+
+    if(n==-1)break;
+    s1.push_back(n);
+
+}
+
+while(cin>>n){
+
+    if(n==-1)break;
+    s2.push_back(n);
+
+
+}
+
+
+s3=inter_s(s1,s2);
+
+
+if(s3.empty()){
+    cout<<"NULL";
+}else {
+
+cout<<s3[0];
+
+for(int i=1;i<s3.size();i++){
+
+    cout<<" "<<s3[i];
+}
+
+
+}
+
+cout<<endl;
+return 0;
+
+
+}
+7-3 重排链表
+#include<bits/stdc++.h>
+using namespace std;
+
+struct Node {
+    int data;
+    string next;
+};
+
+int main() {
+    string start;
+    int n;
+
+    // 输入起始地址和节点个数
+    cin >> start >> n;
+
+    // 使用map存储每个节点的信息，键为节点地址，值为Node结构体
+    map<string, Node> nodes;
+    for (int i = 0; i < n; i++) {
+        string address, next;
+        int id;
+        cin >> address >> id >> next;
+        nodes[address] = {id, next};
+    }
+
+    // 将节点按照链表的顺序存入result向量
+    vector<pair<string, Node>> result;
+    string current = start;
+    while (current != "-1") {
+        result.push_back({current, nodes[current]});
+        current = nodes[current].next;
+    }
+
+    // 使用两个索引从两端获取节点，重新排列顺序
+    vector<pair<string, Node>> reordered;
+    int i = 0, j = result.size() - 1;
+    while (i <= j) {
+        if (j >= i) {
+            reordered.push_back(result[j]);  // 先放大的数 (如6)
+            j--;
+        }
+        if (i <= j) {
+            reordered.push_back(result[i]);  // 再放小的数 (如1)
+            i++;
+        }
+    }
+
+    // 修改每个节点的next指针
+    for (size_t k = 0; k < reordered.size() - 1; k++) {
+        reordered[k].second.next = reordered[k + 1].first;  // 指向下一个节点
+    }
+    reordered.back().second.next = "-1";  // 最后一个节点指向-1
+
+    // 输出调整后的链表
+    for (auto &node : reordered) {
+        cout << node.first << " " << node.second.data << " " << node.second.next << endl;
+    }
+
+    return 0;
+}
+7-4 约瑟夫环
+#include<bits/stdc++.h>
+using namespace std;
+
+struct Node{
+
+int data;
+Node* next;
+
+Node(int d){
+
+data=d;
+next=nullptr;
+
+}
+
+};
+
+
+
+
+int main(){
+
+int n,m;
+cin>>n>>m;
+
+Node* node=new Node(1);
+
+Node* prenode=node;
+
+for(int i=2;i<=n;i++){
+    Node* p= new Node(i); 
+    prenode->next=p;
+    prenode=p;
+    
+}
+prenode->next=node;
+
+
+Node* current=node;
+
+while(n>0){
+    
+    for(int i=1;i<m;i++){
+        
+        prenode=current;
+        current=current->next;
+        }
+        
+    
+    cout<<current->data;
+    if(n>1)cout<<" ";
+    Node* todestory=current;
+    prenode->next=current->next;
+    current=current->next;
+    
+    delete todestory;
+    
+    n--;
+    
+    
+    
+}
+
+
+cout<<endl;
+
+return 0;
+}
+7-5 单链表的创建及遍历
+#include<bits/stdc++.h>
+using namespace std;
+
+
+
+int main(){
+int n;
+cin>>n;
+int data;
+bool frist=true;
+while(cin>>data&&n>0){
+
+    if(!frist)cout<<" ";
+    cout<<data;
+    frist=false;
+    n--;
+}
+cout<<endl;
+
+
+return 0;
+}
+7-6 链表去重
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Node {
+    int data;
+    string next;
+    Node(int da, string nxt) {
+        data = da;
+        next = nxt;
+    }
+    Node(){
+    }
+};
+
+int main() {
+    string start;
+    int n;
+    cin >> start >> n;
+
+    map<string, Node> node_map;
+
+    for (int i = 0; i < n; i++) {
+        string address, next;
+        int data;
+        cin >> address >> data >> next;
+        node_map[address] = {data, next};
+    }
+
+    set<int> visited;
+    vector<pair<string, Node>> final_list;
+    vector<pair<string, Node>> removed_list;
+
+    string current = start;
+
+    while (current != "-1") {
+        int abs_data = abs(node_map[current].data);
+        if (visited.find(abs_data) != visited.end()) {
+            removed_list.push_back({current, node_map[current]});
+        } else {
+            final_list.push_back({current, node_map[current]});
+            visited.insert(abs_data);
+        }
+        current = node_map[current].next;
+    }
+
+    // 输出去重后的链表
+    for (size_t i = 0; i < final_list.size(); i++) {
+        if (i < final_list.size() - 1) {
+            cout << final_list[i].first << " " << final_list[i].second.data << " " << final_list[i + 1].first << endl;
+        } else {
+            cout << final_list[i].first << " " << final_list[i].second.data << " -1" << endl;
+        }
+    }
+
+    // 输出被删除的链表
+    for (size_t i = 0; i < removed_list.size(); i++) {
+        if (i < removed_list.size() - 1) {
+            cout << removed_list[i].first << " " << removed_list[i].second.data << " " << removed_list[i + 1].first << endl;
+        } else {
+            cout << removed_list[i].first << " " << removed_list[i].second.data << " -1" << endl;
+        }
+    }
+
+    return 0;
+}
+7-7 单链表就地逆置
+#include<bits/stdc++.h>
+using namespace std;
+
+
+
+int main(){
+
+int n;
+cin>>n;
+while(n>0){
+vector<int>a;
+int p=0;
+int data;
+while(cin>>data&&data!=-1){
+    a.push_back(data);
+    p++;
+}
+a.resize(p);
+reverse(a.begin(),a.end());
+
+bool first=true;
+for(int i=0;i<p;i++){
+    if(!first)cout<<" ";
+    cout<<a[i];
+
+    first=false;
+}
+    cout<<endl;
+n--;
+}
+
+
+return 0;
+}
+7-8 带头节点的双向循环链表操作
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+
+int n=0;
+
+vector<int>a(n);
+vector<int>b(n);
+
+int data;
+while(cin>>data&&data!=-1){
+    a.push_back(data);
+    b.push_back(data);
+    n++;
+
+    }
+
+reverse(a.begin(),a.end());
+
+int frist=1;
+
+for(int i=0;i<n;i++){
+   
+    if(i%2==1&&frist==1){
+        cout<<a[i];
+    }else if(i%2==1&&frist==0){
+     cout<<" "<<a[i];
+     
+    }
+    frist=0;
+}
+for(int i=0;i<n;i++){
+    if(i%2==1){
+        cout<<" "<<b[i];
+    }
+}
+
+frist=1;
+cout<<endl;
+for(int i=0;i<n;i++){
+      if(i%2==0&&frist==1){
+        cout<<a[i];
+    }else if(i%2==1&&frist==0)cout<<" "<<a[i];
+     frist=0;
+}
+for(int i=0;i<n;i++){
+    if(i%2==0){
+        cout<<b[i]<<" ";
+    }
+}
+cout<<endl;
+
+
+return 0;
+}
+7-9 头插法创建单链表、遍历链表、删除链表
+#include<bits/stdc++.h>
+using namespace std;
+
+
+
+int main(){
+
+int n;
+cin>>n;
+while(n>0){
+vector<int>a;
+int p=0;
+int data;
+while(cin>>data&&data!=-1){
+    a.push_back(data);
+    p++;
+}
+a.resize(p);
+reverse(a.begin(),a.end());
+
+bool first=true;
+for(int i=0;i<p;i++){
+    
+    cout<<a[i]<<" ";
+
+    first=false;
+}
+    cout<<endl;
+n--;
+}
+
+
+return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
