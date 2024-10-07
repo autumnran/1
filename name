@@ -418,69 +418,16 @@ void fun(int x,int sum,int l)
 }
 7-11 猴子选大王
 
-#include<bits/stdc++.h>
-using namespace std;
-
-struct Node{
-int data;
-Node*next;
-
-Node(int n){
-data=n;
-next=nullptr;
-
+#include<stdio.h>
+int main()
+{
+    int n,i,m,sum=0;
+    scanf("%d %d",&n,&m);
+    for(i=2;i<=n;i++) sum=(sum+m)%i;
+    printf("%d",sum+1);
+    return 0;
 }
 
-};
-
-
-
-
-int main(){
-int n,m;
-
-cin>>n>>m;
-
-if(n==1)cout<<1<<endl;
-else{
-        
-Node *monkey=new Node(1);
-Node *cur=monkey;
-for(int i=2;i<=n;i++){
-    Node *monkeys=new Node(i);    
-    cur->next=monkeys;
-    cur=monkeys;
-    }
-cur->next=monkey;
-
-
-
-Node *cur1=cur;
-Node *cur1next=monkey;
-
-while(n>1){
-for(int i=1;i<m;i++){
-    cur1=cur1next;
-    cur1next=cur1next->next;
-    cur1->next=cur1next;
-    }
-    
-    
-    Node *todelete=cur1next;
-    cur1next=cur1next->next;
-    cur1->next=cur1next;
-    delete(todelete);
-    n--;
-    
-}
-
-cout<<cur1next->data<<endl;
-
-
-}
-
-return 0;
-}
 7-1 两个有序链表序列的合并
 #include<bits/stdc++.h>
 using namespace std;
@@ -946,6 +893,462 @@ n--;
 
 return 0;
 }
+
+7-1 顺序表的建立及遍历
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int n;
+    // 读入n值
+    cin >> n;
+    
+    // 创建一个vector存储n个整数
+    vector<int> arr(n);
+    
+    // 读入n个整数
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+    
+    // 遍历输出，注意最后一个数后面没有空格
+    for (int i = 0; i < n; i++) {
+        if (i > 0) cout << " ";  // 控制空格的输出
+        cout << arr[i];
+    }
+    
+    return 0;
+}
+
+7-2 递增有序顺序表的插入
+
+#include<bits/stdc++.h>
+using namespace std;
+
+
+int main(){
+
+
+int n;
+cin>>n;
+vector<int>a(n+1);
+
+for(int i=0;i<n;i++){
+    cin>>a[i];
+}
+cin>>a[n];
+
+sort(a.begin(),a.end());
+for(int i=0;i<n+1;i++){
+    cout<<a[i]<<',';
+}
+return 0;
+
+}
+7-3 顺序表（删除）
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+
+int n;
+cin>>n;
+vector<int>a(n);
+
+for(int i=0;i<n;i++){
+    cin>>a[i];
+
+}
+
+int x,y;
+cin>>x>>y;
+
+vector<int>b(n);
+int p=0;
+for(int i=0;i<n;i++){
+
+    if(a[i]<x||a[i]>y){
+       b[p]=a[i];
+       p++;
+    }
+
+}
+for(int i=0;i<p-1;i++){
+    cout<<b[i]<<" ";
+}
+
+cout<<b[p-1];
+return 0;
+
+}
+7-4 最大子列和问题
+#include<bits/stdc++.h>
+using namespace std;
+
+/*
+有总比没有好，只要之前数是正的就可以和后面的相加
+
+如果变成更大的就继续
+
+如果小于0了就把自己舍弃
+
+
+*/
+int main(){
+
+    int n;
+    cin>>n;
+
+vector<int>a(n);
+
+for(int i=0;i<n;i++){
+cin>>a[i];
+}
+
+
+/*
+设置cursum为了与sum相比较
+
+*/
+    
+int sum=0;
+int cursum=0;
+for(int i=0;i<n;i++){
+
+    cursum+=a[i];
+
+    if(cursum>sum){
+       sum= cursum;
+    }else if(cursum<0){
+    cursum=0;
+    }
+
+
+}
+
+cout<<sum;
+
+
+return 0;
+}
+7-5 数组元素循环右移n位
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+
+int n,m;
+cin>>n>>m;
+
+if(m>n)m=m%n;
+
+vector<int>a(n);
+
+for(int i=0;i<n;i++){
+    cin>>a[i];
+}
+
+for(int i=n-m;i<n;i++){
+    cout<<a[i]<<" ";
+}
+
+for(int i=0;i<n-m;i++){
+    cout<<a[i]<<" ";
+}
+return 0;
+
+
+}
+#include<bits/stdc++.h>
+using namespace std;
+
+
+int main(){
+int n;
+
+cin>>n;
+cin.ignore();
+
+for(int i=0;i<n;i++){
+string a;
+getline(cin,a);
+
+stringstream ss(a);
+string word;
+
+
+int q=1;
+    while(ss>>word){
+    reverse(word.begin(),word.end());
+    
+    if(q!=1){
+        cout<<" ";
+        cout<<word;
+    }else if(q==1){
+    
+    cout<<word;
+    q=2;
+    }
+
+        
+    
+    
+    
+    
+    }
+    cout<<endl;
+
+
+}
+
+return 0;
+}
+7-7 一元多项式的乘法与加法运算
+#include<bits/stdc++.h>
+using namespace std;
+
+
+void readshizi(map<int,int>&shizi){
+
+int n;
+cin>>n;
+while(n--){
+    int a,b;
+    cin>>a>>b;
+    shizi[b]=a;
+
+}
+
+}
+
+
+void Printshizi(map<int,int>&shizi){
+
+        bool first=true;
+    for(auto it=shizi.rbegin();it!=shizi.rend();it++){
+        if(it->second!=0){
+            if(!first)cout<<" ";
+            cout<<it->second<<" "<<it->first;
+            first=false;
+        }
+    }
+
+    if(first)cout<<"0 0";
+
+    cout<<endl;
+
+
+
+}
+
+map<int,int>addshizi(const map<int,int>shizi1,const map<int,int>shizi2){
+
+map<int, int>result=shizi1;
+for(auto&[zhishu,di]:shizi2){
+    result[zhishu]+=di;
+    if(result[zhishu]==0)result.erase(di);
+}
+return result;
+
+
+}
+
+
+map<int, int> multiplyPoly(const map<int, int>& poly1, const map<int, int>& poly2) {
+    map<int, int> result;
+    for (const auto& [exp1, coef1] : poly1) {
+        for (const auto& [exp2, coef2] : poly2) {
+            result[exp1 + exp2] += coef1 * coef2;  // 累加相乘结果
+            if (result[exp1 + exp2] == 0) result.erase(exp1 + exp2);  // 系数为0则删除项
+        }
+    }
+    return result;
+}
+
+
+
+
+int main(){
+
+    map<int,int>shizi1,shizi2;
+
+    readshizi(shizi1);
+    readshizi(shizi2);
+    map<int, int> product = multiplyPoly(shizi1, shizi2);
+    Printshizi(product);
+
+    // 计算和多项式并输出
+    map<int, int> sum = addshizi(shizi1, shizi2);
+    Printshizi(sum);
+
+return 0;
+}
+7-8 一元多项式的加法
+#include <iostream>
+#include <map>
+using namespace std;
+
+// 读取多项式
+map<int, int> read_polynomial(int n) {
+    map<int, int> poly;
+    for (int i = 0; i < n; ++i) {
+        int coef, exp;
+        cin >> coef >> exp;
+        poly[exp] = coef;  // 将多项式项存入map，键为指数，值为系数
+    }
+    return poly;
+}
+
+// 多项式相加
+map<int, int> add_polynomials(const map<int, int>& poly1, const map<int, int>& poly2) {
+    map<int, int> result = poly1;
+    for (const auto& [exp, coef] : poly2) {
+        result[exp] += coef;  // 对应指数的项相加
+        if (result[exp] == 0) {
+            result.erase(exp);  // 如果相加后系数为0，删除该项
+        }
+    }
+    return result;
+}
+
+// 多项式相乘
+map<int, int> multiply_polynomials(const map<int, int>& poly1, const map<int, int>& poly2) {
+    map<int, int> result;
+    for (const auto& [exp1, coef1] : poly1) {
+        for (const auto& [exp2, coef2] : poly2) {
+            int new_exp = exp1 + exp2;
+            int new_coef = coef1 * coef2;
+            result[new_exp] += new_coef;  // 对应指数项累加
+            if (result[new_exp] == 0) {
+                result.erase(new_exp);  // 如果系数为0，删除该项
+            }
+        }
+    }
+    return result;
+}
+
+// 打印多项式
+void print_polynomial(const map<int, int>& poly) {
+    if (poly.empty()) {
+        cout << "0 0";  // 如果多项式为空，输出0 0
+    } else {
+        bool first = true;
+        for (auto it = poly.rbegin(); it != poly.rend(); ++it) {
+            if (!first) cout << " ";
+            cout << it->second << " " << it->first;  // 输出系数和指数
+            first = false;
+        }
+    }
+    cout << endl;
+}
+
+int main() {
+    int n1, n2;
+    
+    // 读取第一个多项式
+    cin >> n1;
+    map<int, int> poly1 = read_polynomial(n1);
+    
+    // 读取第二个多项式
+    cin >> n2;
+    map<int, int> poly2 = read_polynomial(n2);
+    
+    // 计算多项式乘积
+    //map<int, int> product = multiply_polynomials(poly1, poly2);
+    
+    // 计算多项式和
+    map<int, int> sum = add_polynomials(poly1, poly2);
+    
+    // 输出乘积
+    //print_polynomial(product);
+    
+    // 输出和
+    print_polynomial(sum);
+
+    return 0;
+}
+7-9 合并有序数组
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+int n;
+cin>>n;
+
+
+
+vector<int>a(n);
+for(int i=0;i<n;i++){
+    cin>>a[i];
+}
+
+int s;
+cin>>s;
+
+
+vector<int>b(s);
+for(int i=0;i<s;i++){
+    cin>>b[i];
+}
+
+vector<int>c(s+n);
+for(int i=0;i<n;i++){
+    
+    c[i]=a[i];
+}
+
+for(int i=0;i<s;i++){
+    
+    c[i+n]=b[i];
+}
+
+sort(c.begin(),c.end());
+for(int i=0;i<n+s;i++){
+    cout<<c[i]<<" ";
+}
+
+
+
+return 0;
+
+}
+
+汉诺塔
+#include<bits/stdc++.h>
+using namespace std;
+int step=1;//有的题目会要求记录最终的移动步骤数，step就是记录移动的步数的。
+void move (int m,char a,char b,char c)
+{
+    if(m==1)
+    {
+        printf("Move disk %d from %c to %c\n",m,a,c);//当只剩最后一块时，将圆片从a移动到C上。
+        step++;
+    }
+    else
+    {
+        move (m-1,a,c,b);
+        printf("Move disk %d from %c to %c\n",m,a,c);//否则的话，将a上面的n-1块金属圆片借助c移动到b上。
+        step ++;
+        move (m-1,b,a,c);//然后再将b上的n-1块圆片借助a移动到c上以达到最终目的。
+    }
+}
+int main()
+{
+    int n;
+    scanf("%d",&n);
+    move (n,'A','B','C');
+    return 0;
+}
+
+
+
+
+
+
+
+
 
 
 
